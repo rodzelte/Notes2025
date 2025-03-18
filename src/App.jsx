@@ -16,10 +16,12 @@ export default function App() {
 
   return (
     <>
-      {name && <Header userName={name} />}
+      {/* {name && <Header userName={name} />}
       {card && <CardName onHandleSubmit={handleSubmit} />}
-      {card && <CardName onHandleSubmit={handleSubmit} />}
+      {card && <CardName onHandleSubmit={handleSubmit} />} */}
 
+      <Header />
+      <AddNote />
       {}
     </>
   );

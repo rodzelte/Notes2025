@@ -1,16 +1,15 @@
-import { SquarePlus } from "lucide-react";
 import React, { useState } from "react";
 
-export default function AddNote({ onHandleClick }) {
+export default function AddNote() {
   const [form, setIsForm] = useState(true);
+  const [title, setTitle] = useState("");
+
+  const [description, setDescription] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = (e) => {
-    e.prevent.default;
-  };
-
-  const onButtonClick = (e) => {
-    setIsForm(false);
-    onHandleClick();
+    e.preventDefault();
+    console.log(title, description, isComplete);
   };
 
   return (
@@ -26,13 +25,25 @@ export default function AddNote({ onHandleClick }) {
           <input
             type="text"
             placeholder="Enter your title"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
             minLength="2"
             autoFocus
           />
+
+          <input
+            type="text"
+            placeholder="Enter your description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+            minLength="2"
+            autoFocus
+          />
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
