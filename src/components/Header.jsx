@@ -1,7 +1,7 @@
 import React from "react";
 
-import addNote from "./addNote";
-import AddNote from "./addNote";
+import AddButton from "./addButton";
+import NoteCard from "./noteCard";
 
 export default function Header({ userName }) {
   return (
@@ -12,8 +12,15 @@ export default function Header({ userName }) {
         </h1>
         <p>Welcome Back! {userName} </p>
       </div>
-      <div className="">
-        <AddNote />
+      <div className="flex flex-col gap-10">
+        <div className="">
+          <AddButton />
+        </div>
+        <div className="bg-gray-400 ">
+          <div className="grid grid-cols-4 gap-4 p-4">
+            <NoteCard />
+          </div>
+        </div>
       </div>
     </div>
   );

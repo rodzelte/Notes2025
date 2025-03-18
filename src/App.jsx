@@ -3,6 +3,7 @@ import CardName from "./components/nameCard";
 import Header from "./components/Header";
 import NoteCard from "./components/noteCard";
 import addNote from "./components/addNote";
+import AddNote from "./components/addNote";
 
 export default function App() {
   const [name, setName] = React.useState("");
@@ -17,8 +18,9 @@ export default function App() {
     <>
       {name && <Header userName={name} />}
       {card && <CardName onHandleSubmit={handleSubmit} />}
-      {<addNote />}
-      {/* {card && <NoteCard title={} description={} isCompleted={} onHandleSubmit={handleSubmit} />} */}
+      {card && <CardName onHandleSubmit={handleSubmit} />}
+
+      {}
     </>
   );
 }
