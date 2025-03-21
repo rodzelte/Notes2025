@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import NotesHeader from "@/components/Header";
 import { NoteCard } from "@/components/NoteCards";
+import { AddNote } from "@/components/addNote";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 // Sample tags
 const sampleTags = [
@@ -42,26 +45,43 @@ const initialNotes = [
   },
   {
     id: "4",
-
     title: "Test",
-
     content: "Test content",
-
     isComplete: false,
-
     updatedAt: new Date(),
-
     tags: [{ id: "1", name: "Work", color: "#000000" }],
   },
 ];
 
+// Function to get initial notes from sessionStorage or default to sample notes
+const getInitialNotes = () => {
+  if (typeof window !== "undefined") {
+    const storedNotes = sessionStorage.getItem("notes");
+    if (storedNotes) {
+      const parsedNotes = JSON.parse(storedNotes);
+      // Convert string dates back to Date objects
+      return parsedNotes.map((note) => ({
+        ...note,
+        updatedAt: new Date(note.updatedAt),
+      }));
+    }
+  }
+  return initialNotes;
+};
+
 export default function NotePage() {
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState(getInitialNotes);
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     status: "all",
     tags: [],
   });
+  const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
+
+  // Save notes to sessionStorage whenever they change
+  useEffect(() => {
+    sessionStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   // All unique tags from all notes
   const availableTags = useMemo(() => {
@@ -126,12 +146,25 @@ export default function NotePage() {
     });
   }, [notes, searchQuery, filters]);
 
+  const handleAddNote = (newNote) => {
+    const note = {
+      id: Date.now().toString(),
+      title: newNote.title,
+      content: newNote.content,
+      isComplete: false,
+      updatedAt: new Date(),
+      tags: newNote.tags,
+    };
+    setNotes([note, ...notes]);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <NotesHeader
         onSearch={setSearchQuery}
         onFilterChange={setFilters}
         availableTags={availableTags}
+        onAddNote={handleAddNote}
       />
       <main className="container mx-auto p-4">
         {filteredNotes.length === 0 ? (
@@ -153,6 +186,12 @@ export default function NotePage() {
           </div>
         )}
       </main>
+      <AddNote
+        open={isAddNoteOpen}
+        onOpenChange={setIsAddNoteOpen}
+        onSave={handleAddNote}
+        availableTags={availableTags}
+      />
     </div>
   );
 }

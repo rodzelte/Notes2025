@@ -3,35 +3,17 @@
 import { Search, Plus, Bell, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AddNote } from "./AddNote";
+import { AddNote } from "./addNote";
 import { useState } from "react";
 
-export default function Header({ onSearch, onFilterChange }) {
-  const [dialogOpen, setDialogOpen] = useState(false);
+export default function Header({ onSearch, availableTags, onAddNote }) {
+  const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedTags, setSelectedTags] = useState([]);
-
-  const handleSaveNote = (note) => {
-    // Here you would typically save the note to your state or database
-    console.log("New note created:", note);
-    // For demonstration purposes, we're just logging the note
-  };
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    onSearch(query); // Propagate the search query change to the parent component
-  };
-
-  const handleStatusChange = (status) => {
-    setSelectedStatus(status);
-    onFilterChange({ status, tags: selectedTags });
-  };
-
-  const handleTagChange = (tags) => {
-    setSelectedTags(tags);
-    onFilterChange({ status: selectedStatus, tags });
+    onSearch(query);
   };
 
   return (
@@ -63,16 +45,17 @@ export default function Header({ onSearch, onFilterChange }) {
             <Settings className="h-4 w-4" />
             <span className="sr-only">Settings</span>
           </Button>
-          <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="mr-1 h-4 w-4" />
-            New Note
+          <Button onClick={() => setIsAddNoteOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Note
           </Button>
         </div>
       </div>
       <AddNote
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onSave={handleSaveNote}
+        open={isAddNoteOpen}
+        onOpenChange={setIsAddNoteOpen}
+        onSave={onAddNote}
+        availableTags={availableTags}
       />
     </header>
   );
